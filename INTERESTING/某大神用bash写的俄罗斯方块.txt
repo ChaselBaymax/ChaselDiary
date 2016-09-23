@@ -1,0 +1,89 @@
+#! /bin/bash
+echo -e "\033[2J"
+shijian=`date +%s`
+bj=(0x7ffe 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x4002 0x7ffe 0 0 0 0)
+bk=("${bj[@]}")
+showx=("${bj[@]}")
+fk=(12 12 0 0 12 12 0 0 12 12 0 0 12 12 0 0 4 4 4 4 0 15 0 0 4 4 4 4 0 15 0 0 4 14 0 0 4 6 4 0 0 14 4 0 4 12 4 0 8 8 12 0 0 14 8 0 12 4 4 0 2 14 0 0 4 4 12 0 8 14 0 0 6 4 4 0 0 14 2 0 8 12 4 0 0 6 12 0 8 12 4 0 0 6 12 0 4 12 8 0 12 6 0 0 4 12 8 0 12 6 0 0)
+dqfk=(0 0 0 0)
+let 'dqfkt=RANDOM%7,RANDOM%4,dqfkx=1,dqfky=6,bffkt=0,bffkz=0,bffkx=0,bffky=0'
+function dqfksc()
+{
+        for((x=0;x<4;x++))
+        do
+                let 'dqfk[x]=fk[dqfkt*16+dqfkz*4+x],dqfk[x]=dqfk[x]<<12,dqfk[x]=dqfk[x]>>dqfky'
+        done
+}
+while :
+do
+        dqfksc
+        showx=("${bj[@]}")
+        for ((x=0;x<4;x++))
+        do
+                let 'showx[x+dqfkx]=showx[x+dqfkx]|dqfk[x]'
+        done
+        showy=1
+        show='\033[0;0H  \n\n\n\n  bash 俄罗斯方块88行 \n 8旋转7左移9右移6落5退出\n'
+        for ((s=0;s<22;s++))
+        do
+                shows=showx[s]
+                showh=""
+                for ((x=0;x<16;x++))
+                do
+                        let 'showt=shows&showy'
+                        if ((showt==0))
+                        then
+                                showh=$showh"\033[40;30m**\033[0m"
+                        else
+                                showh=$showh"\033[47;37m**\033[0m"
+                        fi
+                        let 'shows=shows>>1'
+                done
+                show=$show$showh"\n"
+        done
+        echo -e $show
+        let 'bffkz=dqfkz,bffkt=dqfkt,bffkx=dqfkx,bffky=dqfky,key=9,fkhf=0'
+        read -s -t 0.1 -n 1 key
+        shijian1=`date +%s`
+        let 'key=(shijian!=shijian1)?6:key'
+        case $key in
+        5)
+                echo -e "\033[0;0H\033[40;37m**\033[0m\033[2J"
+                exit;;
+        8)
+                let 'dqfkz=(dqfkz<3)?dqfkz+1:0';;
+        esac
+        let 'dqfky=(key==7)?dqfky+1:dqfky'
+        let 'dqfky=(key==9)?dqfky-1:dqfky'
+        let 'dqfkx=(key==6)?dqfkx+1:dqfkx'
+        let 'shijian=(key==6)?shijian1:shijian'
+        dqfksc
+        for((x=0;x<4;x++))
+        do
+                let 'fkhf=fkhf+(bj[x+dqfkx]&dqfk[x])'
+        done
+        if ((fkhf!=0))
+        then
+                if ((key==6))
+                then
+                        let 'dqfkt=RANDOM%7,RANDOM%4,dqfkx=1,dqfky=6'
+                        bj=("${showx[@]}")
+                        if ((bffkx==1))
+                        then
+                                bj=("${bk[@]}")
+                        fi
+                else
+                        let 'dqfkz=bffkz,dqfkt=bffkt,dqfkx=bffkx,dqfky=bffky'
+                fi
+        fi
+        bjm=("${bk[@]}")
+        for((x=16,y=16;x>0;x--))
+        do
+                if ((bj[x]!=0x7ffe))
+                then
+                        let 'bjm[y]=bj[x],y--'
+                fi
+        done
+        bj=("${bjm[@]}")
+done
+
